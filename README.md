@@ -1,13 +1,21 @@
-# lce save editor
+# LCE Save Editor
 
-a browser-based save editor for **minecraft legacy console edition** (TU19 / 1.6 era).
+a browser-based save editor for **minecraft legacy console edition** (TU68 / 1.12 era).
 load a `.ms` save file or a plain player `.dat`, edit your inventory, player stats, and world settings, then download the modified save straight back to your machine — no install needed.
 
-**→ [lce.justin.rest](https://lce.justin.rest)**
+**→ [lce.str1k3r.xyz](https://lce.str1k3r.xyz)**
 
 ---
 
-## what it can do
+## What was Updated?
+
+I Updated this to support versions above TU19 so it now supports all the way upto TU68!
+Why TU68? You may ask this is because publicly we only have the Block & Item ID's up to TU68 / 1.12
+If you know the Block & Item ID's for TU69+ Please contact me on discord: strk1k3r87
+
+---
+
+## What it can do
 
 - **inventory** — add, remove, or edit items; change stack count, damage, and enchantments; drag-and-drop slots; bulk repair or max stacks
 - **player stats** — health, food, saturation, xp level, game mode, position, spawn point
@@ -16,13 +24,13 @@ load a `.ms` save file or a plain player `.dat`, edit your inventory, player sta
 
 ---
 
-## how the .ms format works
+## How the .ms format works
 
 the `.ms` file is a zlib-compressed container holding multiple embedded files (player dat, level.dat, etc.). see [`src/lib/containers.ts`](src/lib/containers.ts) for the full format breakdown and step-by-step read/write logic.
 
 ---
 
-## source files
+## Source Files
 
 | file | purpose |
 |------|---------|
@@ -40,7 +48,7 @@ the `.ms` file is a zlib-compressed container holding multiple embedded files (p
 
 ---
 
-## running locally
+## Running locally
 
 ```bash
 npm install
@@ -51,7 +59,7 @@ requires node 18+.
 
 ---
 
-## notes
+## Notes
 
 - all editing happens in-browser — nothing is sent to a server
 - always back up your saves before editing

@@ -34,25 +34,16 @@ function getImage(opts: { path?: string; _canvas?: HTMLCanvasElement; _img?: HTM
   if (opts._canvas) return opts._canvas
   const path = opts.path ?? ''
   if (PATH_MAP[path]) return loadImg(PATH_MAP[path])
-  return loadImg(`https://raw.githubusercontent.com/PrismarineJS/minecraft-assets/master/data/1.16.4/${path}.png`)
+  return loadImg(`https://raw.githubusercontent.com/PrismarineJS/minecraft-assets/master/data/1.13.2/${path}.png`)
 }
 
 // ── per-item CDN image loading ─────────────────────────────────────────────────
 
-const itemImgCache = new Map<number, HTMLImageElement | 'pending' | 'failed'>()
+const itemImgCache = new Map<number, Map<'top' | 'bottom' | 'side', HTMLImageElement | 'pending' | 'failed'>>()
 const loadCallbacks: Array<(id: number) => void> = []
 
 function getItemImage(id: number): HTMLImageElement | null {
-  const cached = itemImgCache.get(id)
-  if (cached === 'pending' || cached === 'failed') return null
-  if (cached) return cached
-  const url = getTextureUrl(id)
-  if (!url) { itemImgCache.set(id, 'failed'); return null }
-  itemImgCache.set(id, 'pending')
-  const img = new Image(); img.crossOrigin = 'anonymous'
-  img.onload  = () => { itemImgCache.set(id, img); loadCallbacks.forEach(cb => cb(id)) }
-  img.onerror = () => { itemImgCache.set(id, 'failed') }
-  img.src = url; return null
+  return getItemImageFace(id, 'side') // this allows non isocube items to still render as flat sprites.
 }
 
 // ── isometric cube rendering ──────────────────────────────────────────────────
@@ -68,7 +59,11 @@ const isoCubeCache = new Map<number, HTMLCanvasElement>()
 // clear on module reload (vite HMR) so scale changes take effect straight away
 isoCubeCache.clear()
 
-function makeIsoCube(img: HTMLImageElement): HTMLCanvasElement {
+function makeIsoCube(
+  topImg:  HTMLImageElement,
+  leftImg: HTMLImageElement,
+  rightImg: HTMLImageElement,
+): HTMLCanvasElement {
   const S = 16 * SCALE
   const PAD = SCALE
   const c = document.createElement('canvas'); c.width = c.height = S
@@ -76,24 +71,51 @@ function makeIsoCube(img: HTMLImageElement): HTMLCanvasElement {
   const inner = S - PAD * 2; const sc = inner / S
   ctx.save(); ctx.translate(PAD, PAD); ctx.scale(sc, sc)
   const T = SCALE
+
+  // top face
   ctx.save(); ctx.transform(0.5*T, 0.25*T, -0.5*T, 0.25*T, S/2, 0)
-  ctx.drawImage(img, 0, 0, 16, 16)
+  ctx.drawImage(topImg, 0, 0, 16, 16)
   ctx.fillStyle = 'rgba(255,255,255,0.18)'; ctx.fillRect(0, 0, 16, 16); ctx.restore()
-  // left face — darkest, matches minecraft's shadow-side shading
+
+  // left face
   ctx.save(); ctx.transform(0.5*T, 0.25*T, 0, 0.5*T, 0, S/4)
-  ctx.drawImage(img, 0, 0, 16, 16)
+  ctx.drawImage(leftImg, 0, 0, 16, 16)
   ctx.fillStyle = 'rgba(0,0,0,0.35)'; ctx.fillRect(0, 0, 16, 16); ctx.restore()
-  // right face — mid brightness
+
+  // right face
   ctx.save(); ctx.transform(0.5*T, -0.25*T, 0, 0.5*T, S/2, S/2)
-  ctx.drawImage(img, 0, 0, 16, 16)
+  ctx.drawImage(rightImg, 0, 0, 16, 16)
   ctx.fillStyle = 'rgba(0,0,0,0.14)'; ctx.fillRect(0, 0, 16, 16); ctx.restore()
+
   ctx.restore(); return c
+}
+
+function getItemImageFace(id: number, face: 'top' | 'side'): HTMLImageElement | null {
+  if (!itemImgCache.has(id)) itemImgCache.set(id, new Map())
+  const faceMap = itemImgCache.get(id)!
+  const cached = faceMap.get(face)
+  if (cached === 'pending' || cached === 'failed') return null
+  if (cached) return cached
+  const url = getTextureUrl(id, face)
+  if (!url) { faceMap.set(face, 'failed'); return null }
+  faceMap.set(face, 'pending')
+  const img = new Image(); img.crossOrigin = 'anonymous'
+  img.onload  = () => { faceMap.set(face, img); loadCallbacks.forEach(cb => cb(id)) }
+  img.onerror = () => { faceMap.set(face, 'failed') }
+  img.src = url; return null
 }
 
 function getIsoIcon(id: number): HTMLCanvasElement | null {
   if (isoCubeCache.has(id)) return isoCubeCache.get(id)!
-  const img = getItemImage(id); if (!img) return null
-  const cube = makeIsoCube(img); isoCubeCache.set(id, cube); return cube
+
+  const top   = getItemImageFace(id, 'top')
+  const side  = getItemImageFace(id, 'side')
+
+
+  if (!top || !side) return null
+
+  const cube = makeIsoCube(top, side, side)
+  isoCubeCache.set(id, cube); return cube
 }
 
 // ── fallback coloured tile ────────────────────────────────────────────────────
@@ -303,9 +325,21 @@ export default function InventoryCanvas({ loaded, onEditSlot, onSwapSlots }: Pro
 
     // suppress the built-in canvas tooltip — we render our own react tooltip instead
     win.renderOverlays = function () {
+      this._boxHighlights = this._boxHighlights.filter((box: number[]) => {
+        const [x, y] = box
+        // skips rendering of the crafting slots
+        return !(x >= 98 && x <= 116 && y >= 18 && y <= 36)
+      })
+
       for (const box of this._boxHighlights) this.drawBox(box)
       const { x, y } = this.can.lastCursorPosition
       if (this.floatingItem) this.drawItem(this.floatingItem, x - 8, y - 8)
+
+      const ctx = this.drawCtx as CanvasRenderingContext2D
+      ctx.save()
+      ctx.fillStyle = '#c6c6c6'
+      ctx.fillRect(98, 18, 58, 40)
+      ctx.restore()
     }
 
     // patch drawItem to add stack count text and enchant glint on top of each icon

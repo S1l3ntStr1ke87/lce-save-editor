@@ -166,12 +166,76 @@ const ITEM_PATHS: Record<number, string> = {
   419: 'items/diamond_horse_armor',
   420: 'items/lead',
   421: 'items/name_tag',
+  422: 'items/command_block_minecart',
+  423: 'items/mutton',
+  424: 'items/cooked_mutton',
+  425: 'items/white_banner',
+  426: 'items/end_crystal',
+  427: 'items/spruce_door',
+  428: 'items/birch_door',
+  429: 'items/acacia_door',
+  430: 'items/jungle_door',
+  431: 'items/dark_oak_door',
+  432: 'items/chorus_fruit',
+  433: 'items/popped_chorus_fruit',
+  434: 'items/beetroot',
+  435: 'items/beetroot_seeds',
+  436: 'items/beetroot_soup',
+  437: 'items/dragon_breath',
+  438: 'items/splash_potion',
+  439: 'items/spectral_arrow',
+  440: 'items/tipped_arrow',
+  441: 'items/lingering_potion',
+  442: 'items/shield',
+  443: 'items/elytra',
+  444: 'items/spruce_boat',
+  445: 'items/birch_boat',
+  446: 'items/acacia_boat',
+  447: 'items/jungle_boat',
+  448: 'items/dark_oak_boat',
+  449: 'items/totem_of_undying',
+  450: 'items/shulker_shell',
+  452: 'items/iron_nugget',
+  //453: 'items/leather_horse_armor',
+  454: 'items/trident',
+  //455: 'items/turtle_scute',
+  456: 'items/turtle_helmet',
+  457: 'items/kelp',
+  458: 'items/dried_kelp',
+  459: 'items/cod_bucket',
+  460: 'items/salmon_bucket',
+  461: 'items/pufferfish_bucket',
+  462: 'items/tropical_fish_bucket',
+  463: 'items/heart_of_the_sea',
+  464: 'items/nautilus_shell',
+  465: 'items/phantom_membrane',
+  466: 'items/spruce_sign',
+  467: 'items/birch_sign',
+  468: 'items/acacia_sign',
+  469: 'items/jungle_sign',
+  470: 'items/dark_oak_sign',
+  471: 'items/crossbow',
+  472: 'items/banner_pattern',
+  473: 'items/sweet_berries',
+  //2255: 'items/debug_4j_item_barrier',
+  2256: 'items/music_disc_13',
+  2257: 'items/music_disc_cat',
+  2258: 'items/music_disc_blocks',
+  2259: 'items/music_disc_chirp',
+  2260: 'items/music_disc_far',
+  2261: 'items/music_disc_mall',
+  2262: 'items/music_disc_mellohi',
+  2263: 'items/music_disc_stal',
+  2264: 'items/music_disc_strad',
+  2265: 'items/music_disc_ward',
+  2266: 'items/music_disc_11',
+  2267: 'items/music_disc_wait',
 }
 
 // block ids 1–255
-const BLOCK_PATHS: Record<number, string> = {
+const BLOCK_PATHS: Record<number, BlockTexture> = {
   1:   'blocks/stone',
-  2:   'blocks/grass_block_top',
+  2:   { top: 'blocks/grass_block_top', side: 'blocks/grass_block_side' },
   3:   'blocks/dirt',
   4:   'blocks/cobblestone',
   5:   'blocks/oak_planks',
@@ -182,13 +246,13 @@ const BLOCK_PATHS: Record<number, string> = {
   14:  'blocks/gold_ore',
   15:  'blocks/iron_ore',
   16:  'blocks/coal_ore',
-  17:  'blocks/oak_log',
+  17:  { top: 'blocks/oak_log_top', side: 'blocks/oak_log' },
   18:  'blocks/oak_leaves',
   20:  'blocks/glass',
   21:  'blocks/lapis_ore',
   22:  'blocks/lapis_block',
   23:  'blocks/dispenser_front',
-  24:  'blocks/sandstone',
+  24:  { top: 'blocks/sandstone_top', side: 'blocks/sandstone' },
   25:  'blocks/note_block',
   27:  'blocks/powered_rail_on',
   28:  'blocks/detector_rail',
@@ -202,8 +266,8 @@ const BLOCK_PATHS: Record<number, string> = {
   42:  'blocks/iron_block',
   44:  'blocks/stone_slab_top',
   45:  'blocks/bricks',
-  46:  'blocks/tnt_side',
-  47:  'blocks/bookshelf',
+  46:  { top: 'blocks/tnt_top', side: 'blocks/tnt_side' },
+  47:  { top: 'blocks/oak_planks', side: 'blocks/bookshelf' },
   48:  'blocks/mossy_cobblestone',
   49:  'blocks/obsidian',
   50:  'blocks/torch',
@@ -212,8 +276,8 @@ const BLOCK_PATHS: Record<number, string> = {
   54:  'blocks/chest_front',
   56:  'blocks/diamond_ore',
   57:  'blocks/diamond_block',
-  58:  'blocks/crafting_table_front',
-  61:  'blocks/furnace_front',
+  58:  { top: 'blocks/crafting_table_top', side: 'blocks/crafting_table_front' },
+  61:  { top: 'blocks/furnace_top', side: 'blocks/furnace_front' },
   65:  'blocks/ladder',
   66:  'blocks/rail',
   67:  'blocks/cobblestone',
@@ -223,25 +287,25 @@ const BLOCK_PATHS: Record<number, string> = {
   78:  'blocks/snow',
   79:  'blocks/ice',
   80:  'blocks/snow',
-  81:  'blocks/cactus_side',
+  81:  { top: 'blocks/cactus_top', side: 'blocks/cactus_side' },
   82:  'blocks/clay',
   83:  'blocks/sugar_cane',
-  84:  'blocks/jukebox_side',
+  84:  { top: 'blocks/jukebox_top', side: 'blocks/jukebox_side' },
   85:  'blocks/oak_planks',
-  86:  'blocks/pumpkin_side',
+  86:  { top: 'blocks/pumpkin_top', side: 'blocks/pumpkin_side' },
   87:  'blocks/netherrack',
   88:  'blocks/soul_sand',
   89:  'blocks/glowstone',
-  91:  'blocks/jack_o_lantern',
+  91:  { top: 'blocks/pumpkin_top', side: 'blocks/jack_o_lantern' },
   92:  'blocks/cake_side',
   96:  'blocks/oak_trapdoor',
   98:  'blocks/stone_bricks',
   101: 'blocks/iron_bars',
   102: 'blocks/glass_pane_top',
-  103: 'blocks/melon_side',
+  103: { top: 'blocks/melon_top', side: 'blocks/melon_side' },
   106: 'blocks/vine',
   112: 'blocks/nether_bricks',
-  116: 'blocks/enchanting_table_top',
+  116: { top: 'blocks/enchanting_table_top', side: 'blocks/enchanting_table_side' },
   121: 'blocks/end_stone',
   129: 'blocks/emerald_ore',
   130: 'blocks/ender_chest_front',
@@ -252,22 +316,43 @@ const BLOCK_PATHS: Record<number, string> = {
   145: 'blocks/anvil_top',
   152: 'blocks/redstone_block',
   153: 'blocks/nether_quartz_ore',
-  155: 'blocks/quartz_block_side',
+  155: { top: 'blocks/quartz_block_top', side: 'blocks/quartz_block_side' },
   159: 'blocks/white_terracotta',
-  170: 'blocks/hay_block_side',
+  170: { top: 'blocks/hay_block_top', side: 'blocks/hay_block_side' },
   172: 'blocks/terracotta',
   173: 'blocks/coal_block',
   174: 'blocks/packed_ice',
+  178: 'blocks/daylight_detector_top',
 }
 
-const CDN = 'https://raw.githubusercontent.com/PrismarineJS/minecraft-assets/master/data/1.16.4/'
+const CDN = 'https://raw.githubusercontent.com/PrismarineJS/minecraft-assets/master/data/1.13.2/'
+
+export function getBlockFaceTexture(id: number, face: 'top' | 'side'): string | null {
+  const entry = BLOCK_PATHS[id]
+  if (!entry) return null
+  if (typeof entry === 'string') return entry
+  return entry[face] ?? entry.side ?? entry.top ?? null
+}
 
 export function getTexturePath(id: number): string | null {
   if (id >= 256) return ITEM_PATHS[id] ?? null
-  return BLOCK_PATHS[id] ?? null
+  const entry = BLOCK_PATHS[id]
+  if (!entry) return null
+  if (typeof entry === 'string') return entry
+  // default fallback: prefer side, then top
+  return entry.side ?? entry.top ?? null
 }
 
-export function getTextureUrl(id: number): string | null {
-  const path = getTexturePath(id)
+export function getTextureUrl(id: number, face: 'top' | 'side' = 'side'): string | null {
+  if (id >= 256) {
+    const path = ITEM_PATHS[id] ?? null
+    return path ? CDN + path + '.png' : null
+  }
+  const path = getBlockFaceTexture(id, face)
+  return path ? CDN + path + '.png' : null
+}
+
+export function getBlockFaceUrl(id: number, face: 'top' | 'side'): string | null {
+  const path = getBlockFaceTexture(id, face)
   return path ? CDN + path + '.png' : null
 }

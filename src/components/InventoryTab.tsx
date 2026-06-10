@@ -590,7 +590,7 @@ function GiveItemModal({
     const q = search.toLowerCase();
     return Object.entries(ITEM_NAMES)
       .filter(([id, name]) => !q || name.toLowerCase().includes(q) || id.includes(q))
-      .slice(0, 50)
+      .slice(0, 500) // update limit to 500 blocks
       .map(([id, name]) => ({ value: Number(id), label: `${name} (#${id})` }));
   }, [search]);
 
